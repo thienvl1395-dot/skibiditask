@@ -1,1 +1,346 @@
-web đang bảo trì
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>skibiditask.online — Vượt link kiếm tiền</title>
+<style>
+  :root{
+    --pink-1:#ffe4ef;
+    --pink-2:#ffb8d6;
+    --pink-3:#ff8fc0;
+    --pink-deep:#e85a9c;
+    --pink-line:#ffffff;
+    --ink:#5c2340;
+    --gold:#ffd76b;
+    --blue-star:#7cc9ff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    font-family:'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(255,242,248,.35) 0%, transparent 40%),
+      radial-gradient(circle at 80% 0%, rgba(255,215,234,.35) 0%, transparent 45%),
+      url('bg.png') center center / cover no-repeat fixed,
+      linear-gradient(160deg, var(--pink-1) 0%, var(--pink-2) 45%, var(--pink-3) 100%);
+    overflow-x:hidden;
+    position:relative;
+    color:var(--ink);
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+  }
+
+  /* floating stars */
+  .stars{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+  }
+  .star{
+    position:absolute;
+    color:#fff;
+    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 10px var(--pink-3));
+    animation: twinkle 3.2s ease-in-out infinite, drift 14s linear infinite;
+    opacity:.85;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.35; transform:scale(.85) rotate(0deg);}
+    50%{opacity:1; transform:scale(1.15) rotate(15deg);}
+  }
+  @keyframes drift{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-14px);}
+    100%{transform:translateY(0);}
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:880px;
+    margin:0 auto;
+    padding:56px 20px 80px;
+    text-align:center;
+  }
+
+  .avatar{
+    width:150px;height:150px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:
+      url('avt.png') center center / cover no-repeat,
+      radial-gradient(circle at 35% 30%, #ffe0f0, #ff9fce 60%, #ff6bb0 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:64px;
+    border:4px solid #fff;
+    box-shadow: 0 0 0 6px rgba(255,255,255,.5), 0 12px 30px rgba(232,90,156,.45);
+    animation: bob 3.5s ease-in-out infinite;
+    overflow:hidden;
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(0) rotate(-2deg);}
+    50%{transform:translateY(-10px) rotate(2deg);}
+  }
+
+  h1{
+    font-size:clamp(30px,6vw,52px);
+    margin:6px 0 2px;
+    letter-spacing:.5px;
+    color:#fff;
+    -webkit-text-stroke: 1.5px var(--pink-deep);
+    text-shadow:
+      0 2px 0 var(--pink-deep),
+      0 4px 14px rgba(232,90,156,.55);
+    font-weight:800;
+  }
+
+  .subtitle{
+    font-size:clamp(15px,2.6vw,20px);
+    font-weight:700;
+    color:var(--ink);
+    margin:2px 0 6px;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,.75);
+    border:2px solid #fff;
+    color:var(--pink-deep);
+    font-weight:700;
+    font-size:14px;
+    padding:8px 18px;
+    border-radius:999px;
+    margin:14px 0 40px;
+    box-shadow:0 6px 16px rgba(232,90,156,.25);
+    backdrop-filter: blur(4px);
+  }
+
+  .cloud-panel{
+    background: rgba(255,255,255,.55);
+    border:2px solid rgba(255,255,255,.8);
+    border-radius:34px;
+    padding:38px 26px 42px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 45px rgba(216,80,150,.25), inset 0 0 0 1px rgba(255,255,255,.4);
+    position:relative;
+  }
+
+  .cloud-panel::before{
+    content:"";
+    position:absolute;
+    top:-22px; left:50%;
+    transform:translateX(-50%);
+    width:70px; height:70px;
+    background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
+    filter: blur(2px);
+  }
+
+  .panel-title{
+    font-size:15px;
+    font-weight:700;
+    color:var(--pink-deep);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    margin-bottom:22px;
+  }
+
+  .links{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    max-width:460px;
+    margin:0 auto;
+  }
+
+  .link-btn{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    text-decoration:none;
+    padding:16px 22px;
+    border-radius:20px;
+    font-weight:700;
+    font-size:17px;
+    color:#fff;
+    overflow:hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+    box-shadow: 0 10px 22px rgba(0,0,0,.15);
+    border:2px solid rgba(255,255,255,.6);
+  }
+  .link-btn:hover{
+    transform: translateY(-4px) scale(1.015);
+  }
+  .link-btn:active{
+    transform: translateY(-1px) scale(.99);
+  }
+
+  .link-btn.discord{
+    background: linear-gradient(135deg, #7d8bff 0%, #5865F2 55%, #4752c4 100%);
+  }
+  .link-btn.discord:hover{ box-shadow: 0 14px 28px rgba(88,101,242,.45);}
+
+  .link-btn.register{
+    background: linear-gradient(135deg, #ff9fce 0%, var(--pink-deep) 55%, #d63f85 100%);
+  }
+  .link-btn.register:hover{ box-shadow: 0 14px 28px rgba(232,90,156,.5);}
+
+  .icon-circle{
+    width:46px;height:46px;
+    flex:0 0 46px;
+    border-radius:50%;
+    background:rgba(255,255,255,.22);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+  }
+
+  .btn-text{
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+    line-height:1.25;
+  }
+  .btn-text .main{font-size:17px;}
+  .btn-text .sub{font-size:12px; font-weight:500; opacity:.85;}
+
+  .arrow{
+    margin-left:auto;
+    font-size:20px;
+    opacity:.85;
+    transition: transform .18s ease;
+  }
+  .link-btn:hover .arrow{ transform:translateX(5px); }
+
+  .shine{
+    position:absolute;
+    top:0; left:-60%;
+    width:40%; height:100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.45), transparent);
+    transform: skewX(-20deg);
+    animation: shine 3.6s ease-in-out infinite;
+  }
+  @keyframes shine{
+    0%{left:-60%;}
+    45%{left:120%;}
+    100%{left:120%;}
+  }
+
+  .footer-note{
+    margin-top:34px;
+    font-size:13px;
+    color:#8a3f66;
+    opacity:.85;
+  }
+
+  .tag-row{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .tag{
+    background:rgba(255,255,255,.6);
+    border:1px solid #fff;
+    color:var(--pink-deep);
+    font-size:12px;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:999px;
+  }
+
+  @media (max-width:480px){
+    .cloud-panel{padding:30px 18px 32px;}
+    .link-btn{padding:14px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+  <div class="avatar"></div>
+  <h1>skibiditask.online</h1>
+  <div class="subtitle">Trang web vượt link kiếm tiền</div>
+  <div class="badge">⭐ An toàn — Uy tín — Chất lượng ⭐</div>
+
+  <div class="cloud-panel">
+    <div class="panel-title">Chọn liên kết bên dưới</div>
+    <div class="links">
+      <a class="link-btn discord" href="https://discord.gg/mpGhfbJraf" target="_blank" rel="noopener">
+        <span class="shine"></span>
+        <span class="icon-circle">💬</span>
+        <span class="btn-text">
+          <span class="main">Tham gia Discord</span>
+          <span class="sub">Cộng đồng Skibiditask — hỗ trợ &amp; thông báo</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="link-btn register" href="https://skibiditask.online/register?ref=REF_DC1F405D" target="_blank" rel="noopener">
+        <span class="shine"></span>
+        <span class="icon-circle">💰</span>
+        <span class="btn-text">
+          <span class="main">Đăng ký ngay</span>
+          <span class="sub">Tạo tài khoản &amp; bắt đầu kiếm tiền</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">🔗 Vượt link</span>
+      <span class="tag">💰 Kiếm tiền online</span>
+      <span class="tag">🛡️ An toàn</span>
+    </div>
+  </div>
+
+  <div class="footer-note"></div>
+</div>
+
+<script>
+  // Chặn chuột phải
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  // Chặn copy / cắt / kéo chọn văn bản
+  document.addEventListener('copy', function(e){ e.preventDefault(); });
+  document.addEventListener('cut', function(e){ e.preventDefault(); });
+  document.addEventListener('selectstart', function(e){ e.preventDefault(); });
+  document.addEventListener('dragstart', function(e){ e.preventDefault(); });
+
+  // Chặn các phím tắt: F12, Ctrl+Shift+I/J/C, Ctrl+U
+  document.addEventListener('keydown', function(e){
+    const key = e.key ? e.key.toUpperCase() : '';
+    if (key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && key === 'U') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'J' || key === 'C')) {
+      e.preventDefault(); return false;
+    }
+    if (e.metaKey && e.altKey && (key === 'I' || key === 'J' || key === 'C')) {
+      // Mac Cmd+Option+I/J/C
+      e.preventDefault(); return false;
+    }
+  });
+
+  const starsContainer = document.getElementById('stars');
+  const starCount = 26;
+  for(let i=0;i<starCount;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = 8 + Math.random()*16;
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.top = Math.random()*100 + 'vh';
+    s.style.fontSize = size + 'px';
+    s.style.animationDelay = (Math.random()*4) + 's, ' + (Math.random()*6) + 's';
+    s.innerHTML = '★';
+    starsContainer.appendChild(s);
+  }
+</script>
+
+</body>
+</html>
+
